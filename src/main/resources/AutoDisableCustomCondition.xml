@@ -1,0 +1,6 @@
+<AutoDisableCustomCondition class="com.tibco.fabric.server.AutoDisableCustomCondition">
+	<property name="name" value="Auto Disable Custom Condition"/>
+	<property name="componentName" value="Enter Name of THIS Component"/>
+	<property name="autoDisable" value="True if THIS component should auto disable"/>
+	<property name="waitFor" value="Number of minutes to wait before disabling"/>	
+</AutoDisableCustomCondition>
