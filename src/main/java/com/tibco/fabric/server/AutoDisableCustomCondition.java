@@ -1,35 +1,19 @@
 package com.tibco.fabric.server;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
+import java.util.logging.Logger;
 
-import com.datasynapse.commons.util.LogUtils;
 import com.datasynapse.fabric.admin.AdminManager;
 import com.datasynapse.fabric.admin.ComponentAdmin;
-import com.datasynapse.fabric.admin.EngineDaemonAdmin;
-import com.datasynapse.fabric.admin.StackAdmin;
-import com.datasynapse.fabric.admin.info.AllocationInfo;
-import com.datasynapse.fabric.admin.info.ComponentAllocationEntryInfo;
-import com.datasynapse.fabric.admin.info.ComponentInfo;
-import com.datasynapse.fabric.admin.info.FabricEngineDaemonInfo;
-import com.datasynapse.fabric.admin.info.RuntimeContextVariableInfo;
-import com.datasynapse.fabric.admin.info.StackInfo;
-import com.datasynapse.fabric.broker.FabricServerEvent;
 import com.datasynapse.fabric.broker.userartifact.condition.AbstractCustomRuleCondition;
-import com.datasynapse.gridserver.admin.Property;
-import com.datasynapse.gridserver.server.ServerEvent;
-import com.datasynapse.gridserver.server.ServerHook;
 
 public class AutoDisableCustomCondition extends AbstractCustomRuleCondition implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 2443519394918129355L;
-	private String ComponentName = null;
-	private String AutoDisable = "false";
-	private String WaitFor = "10";
+	
+	private String componentName = null;
+	private String autoDisable = "false";
+	private String waitFor = "10";
 	private int intWaitCount = 0;
 	private final ComponentAdmin ca = AdminManager.getComponentAdmin();
 	private String description = null;
@@ -37,7 +21,7 @@ public class AutoDisableCustomCondition extends AbstractCustomRuleCondition impl
 
 	@Override
 	public String getDescription() {
-		return "Component " + ComponentName + " will activated for " +WaitFor + " minutes and then shut down again";
+		return "Component " + componentName + " will activated for " +waitFor + " minutes and then shut down again";
 	}
 
 	@Override
@@ -45,15 +29,15 @@ public class AutoDisableCustomCondition extends AbstractCustomRuleCondition impl
 		boolean satisfied = false;
 		try {
 			// Allocated Engine Count in ComponentAdmin only returns successfully started Engines
-			int remEngineCountCA = ca.getAllocatedEngineCount(ComponentName);
-			if (AutoDisable.equalsIgnoreCase("true") && remEngineCountCA == 0){
+			int remEngineCountCA = ca.getAllocatedEngineCount(componentName);
+			if (autoDisable.equalsIgnoreCase("true") && remEngineCountCA == 0){
 				satisfied = true;
-				intWaitCount = Integer.parseInt(WaitFor);
+				intWaitCount = Integer.parseInt(waitFor);
 			}
 			if (remEngineCountCA > 0){
 				// our component is now active stop waiting for activation and, begin the autodisable count down...
-				AutoDisable = "false";
-				LogUtils.forObject(this).fine("Counting down to disablement of " + ComponentName + " " + intWaitCount);
+				autoDisable = "false";
+				Logger.getLogger(getClass().getSimpleName()).fine("Counting down to disablement of " + componentName + " " + intWaitCount);
 				intWaitCount--;
 				if (intWaitCount > 0) {
 					satisfied = true;
@@ -61,34 +45,33 @@ public class AutoDisableCustomCondition extends AbstractCustomRuleCondition impl
 
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return satisfied;
 	}
 
 	public String getComponentName() {
-		return ComponentName;
+		return componentName;
 	}
 
-	public void setComponentName(String ComponentName) {
-		this.ComponentName = ComponentName;
+	public void setComponentName(String componentName) {
+		this.componentName = componentName;
 	}
 
 	public String getAutoDisable() {
-		return AutoDisable;
+		return autoDisable;
 	}
 
 	public void setAutoDisable(String autoDisable) {
-		AutoDisable = autoDisable;
+		this.autoDisable = autoDisable;
 	}
 
 	public String getWaitFor() {
-		return WaitFor;
+		return waitFor;
 	}
 
 	public void setWaitFor(String waitFor) {
-		this.WaitFor = waitFor;
+		this.waitFor = waitFor;
 	}
 
 	public void setDescription(String description) {
