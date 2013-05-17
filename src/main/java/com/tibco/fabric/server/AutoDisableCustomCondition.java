@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013 TIBCO Software Inc. All Rights Reserved.
+q * Copyright (c) 2013 TIBCO Software Inc. All Rights Reserved.
  * 
  * Use is subject to the terms of the TIBCO license terms accompanying the download of this code. 
  * In most instances, the license terms are contained in a file named license.txt.
@@ -24,7 +24,6 @@ public class AutoDisableCustomCondition extends AbstractCustomRuleCondition impl
     private int intWaitCount = 0;
     private final ComponentAdmin ca = AdminManager.getComponentAdmin();
     private String description = null;
-    private String lastModifiedBy = null;
 
     @Override
     public String getDescription() {
@@ -83,10 +82,6 @@ public class AutoDisableCustomCondition extends AbstractCustomRuleCondition impl
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
     }
 
 }
