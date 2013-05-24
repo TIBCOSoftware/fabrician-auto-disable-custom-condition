@@ -10,7 +10,17 @@ if a specfic condition is satisfied.  Custom Conditions may be referenced in Thr
 Activation or Enablement Condition Rules to define allocation behavior.  See the Silver
 Fabric Developers Guide and the API for more details.
 
-The Auto Disable Custom Condition determines when a component will automatically become disabled.
+Use Case: Run a component for a fixed period of time to perform a task, and then it 
+automatically disables itself.
+
+For example, one could perform load testing for a fixed period of time and then stop, 
+or perhaps run something like Puppet to apply changes to an operating system or an application 
+environment, and then once that’s done it can shut itself down.
+
+The Auto Disable Custom Condition is a simplified variation Allocation Failure Custom Condition 
+except there is no second component to monitor.  It should start up, and then shut itself down 
+after a set period of time.  In this case, it modifies the stack after completion, so to re-run 
+the stack, you just publish the stack again.
 
 Installation
 --------------------------------------
